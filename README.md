@@ -1,6 +1,6 @@
 # PanSou Node.js Version
-这是借用go语言的pansou项目转换成node的项目，用来学习。详情请看https://github.com/fish2018/pansou
-Node.js版本的PanSou网盘搜索API服务。
+
+Node.js版本的PanSou网盘搜索
 
 ## 特性
 
@@ -44,7 +44,7 @@ npm start
 
 | 环境变量 | 描述 | 默认值 |
 |---------|------|-------|
-| PORT | 服务端口 | 8888 |
+| PORT | 服务端口 | 8080 |
 | PROXY | SOCKS5代理 | 无 |
 | CHANNELS | 默认搜索的TG频道 | tgsearchers3 |
 | ENABLED_PLUGINS | 启用的插件 | 无 |
