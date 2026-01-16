@@ -1,5 +1,5 @@
 # PanSou Node.js Version
-
+这是借用go语言的pansou项目转换成node的项目，用来学习。详情请看https://github.com/fish2018/pansou
 Node.js版本的PanSou网盘搜索API服务。
 
 ## 特性
@@ -27,6 +27,8 @@ npm install
 
 ```bash
 npm run dev
+8080端口
+运行服务器后打开examples文件夹里的浏览器。
 ```
 
 ### 构建
