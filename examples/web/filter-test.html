@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>过滤器测试</title>
+</head>
+<body>
+    <h1>🔍 过滤器修复测试</h1>
+    <button onclick="window.location.href='/'">返回主页</button>
+    
+    <h3>过滤器修复内容：</h3>
+    <ul>
+        <li>✅ 修复了currentFilter设置时机错误</li>
+        <li>✅ 修复了多余的花括号导致的语法错误</li>
+        <li>✅ 移除了HTML中的内联onclick，避免重复调用</li>
+    </ul>
+    
+    <h3>测试步骤：</h3>
+    <ol>
+        <li>返回主页搜索任意关键词（如：test）</li>
+        <li>等待搜索完成</li>
+        <li>点击不同的过滤按钮</li>
+        <li>应该能正常过滤，无卡顿，无重复调用</li>
+    </ol>
+    
+    <h3>预期效果：</h3>
+    <ul>
+        <li>点击"全部" - 显示所有结果</li>
+        <li>点击"百度网盘" - 只显示百度网盘结果</li>
+        <li>点击其他类型 - 只显示对应类型结果</li>
+        <li>过滤响应时间 < 100ms</li>
+        <li>控制台无"过滤类型未变化，跳过处理"日志（除非真的重复点击）</li>
+    </ul>
+    
+    <script>
+        console.log('过滤器修复测试页面加载完成');
+        console.log('修复内容：');
+        console.log('1. currentFilter设置时机调整');
+        console.log('2. 语法错误修复');
+        console.log('3. 移除重复事件绑定');
+    </script>
+</body>
+</html>

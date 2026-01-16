@@ -1,0 +1,50 @@
+{
+  "name": "pansou-node",
+  "version": "1.0.0",
+  "description": "Node.js version of PanSou - High-performance netdisk search API",
+  "main": "dist/index.js",
+  "bin": {
+    "pansou": "dist/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "example": "tsx examples/search-example.ts",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "pansou",
+    "netdisk",
+    "search",
+    "telegram",
+    "api"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "bcryptjs": "^2.4.3",
+    "cheerio": "^1.0.0-rc.12",
+    "express": "^4.18.2",
+    "http-proxy-agent": "^7.0.2",
+    "https-proxy-agent": "^7.0.6",
+    "jsonwebtoken": "^9.0.2",
+    "socks-proxy-agent": "^8.0.5",
+    "uuid": "^9.0.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.0",
+    "@types/cheerio": "^0.22.0",
+    "@types/express": "^4.17.0",
+    "@types/jsonwebtoken": "^9.0.0",
+    "@types/node": "^20.0.0",
+    "@types/uuid": "^9.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

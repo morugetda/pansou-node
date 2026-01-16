@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PanSou 盘搜 - 网盘资源搜索</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .proxy-tip {
+            background: rgba(255,193,7,0.15);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            color: white;
+            text-align: center;
+        }
+
+        .proxy-tip h3 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .proxy-tip code {
+            background: rgba(0,0,0,0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 50px;
+            padding: 10px;
+            display: flex;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin: 30px auto;
+            max-width: 700px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+        }
+
+        .search-box button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .filter-tag {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .filter-tag:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .filter-tag.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .results {
+            margin: 20px 0;
+        }
+
+        .result-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .result-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .result-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .link-box {
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .link-url {
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            display: inline-block;
+            max-width: 100%;
+            word-break: break-all;
+        }
+
+        .password {
+            background: #4caf50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-download {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #45a049;
+        }
+
+        .btn-copy {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background: #5a6fd6;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .result-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .internal-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            border: 2px solid #4caf50;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载网页下载助手 -->
+    <script src="https://cdn.jsdelivr.net/npm/streamsaver@2.0.6/StreamSaver.min.js"></script>
+    <script src="app.js"></script>
+    
+    <div class="container">
+        <header class="header">
+            <h1>🔍 PanSou 盘搜</h1>
+            <p>高性能网盘资源搜索 - 百度网盘、阿里云盘、夸克网盘...</p>
+        </header>
+
+
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="输入搜索关键词（推荐：test, 游戏, movie, software）..." />
+            <button id="searchBtn">搜索</button>
+            <button id="stopBtn" style="display: none; background: #f44336;">停止</button>
+        </div>
+
+        <div class="filters" id="filters">
+            <span class="filter-tag active" data-type="all">全部</span>
+            <span class="filter-tag" data-type="baidu">百度网盘</span>
+            <span class="filter-tag" data-type="aliyun">阿里云盘</span>
+            <span class="filter-tag" data-type="quark">夸克网盘</span>
+            <span class="filter-tag" data-type="tianyi">天翼云盘</span>
+            <span class="filter-tag" data-type="115">115网盘</span>
+            <span class="filter-tag" data-type="pikpak">PikPak</span>
+            <span class="filter-tag" data-type="magnet">磁力链接</span>
+        </div>
+
+        <div id="loader" class="loader" style="display: none;">
+            <div class="loader-spinner"></div>
+            <p>正在搜索中，请稍候...</p>
+        </div>
+
+        <div id="results" class="results"></div>
+
+        <div id="empty" class="empty" style="display: none;">
+            <div class="empty-icon">🔍</div>
+            <p>输入关键词开始搜索</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('HTML初始化完成，端口8080，等待app.js...');
+    </script>
+</body>
+</html>
